@@ -210,21 +210,21 @@
                 <details class="side-group">
                     <summary class="side-link side-group-toggle"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16l-1 13H5L4 7Zm4 0V5a4 4 0 0 1 8 0v2" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span>Products</span><svg class="side-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                     <div class="side-subnav">
-                        <span class="side-sub-link unavailable" aria-disabled="true">All Products</span>
-                        <span class="side-sub-link unavailable" aria-disabled="true">Categories</span>
-                        <span class="side-sub-link unavailable" aria-disabled="true">Brands</span>
+                        <a class="side-sub-link" href="{{ route('products.index') }}">All Products</a>
+                        <a class="side-sub-link" href="{{ route('products.categories') }}">Categories</a>
+                        <a class="side-sub-link" href="{{ route('products.brands') }}">Brands</a>
                     </div>
                 </details>
 
                 <details class="side-group">
                     <summary class="side-link side-group-toggle"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 7 8-4 8 4v10l-8 4-8-4V7Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m4.5 7.3 7.5 4.2 7.5-4.2M12 12v8" stroke="currentColor" stroke-width="1.7"/></svg><span>Inventory</span><svg class="side-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                     <div class="side-subnav">
-                        <a class="side-sub-link" href="#inventory-summary">Stock Overview</a>
-                        <span class="side-sub-link unavailable" aria-disabled="true">Stock In</span>
-                        <span class="side-sub-link unavailable" aria-disabled="true">Stock Out</span>
-                        <span class="side-sub-link unavailable" aria-disabled="true">Stock Adjustment</span>
-                        <a class="side-sub-link" href="#notifications">Low Stock</a>
-                        <a class="side-sub-link" href="#expiring-products">Expiring Products</a>
+                        <a class="side-sub-link" href="{{ route('inventory.index') }}">Stock Overview</a>
+                        <a class="side-sub-link" href="{{ route('inventory.stock-in') }}">Stock In</a>
+                        <a class="side-sub-link" href="{{ route('inventory.stock-out') }}">Stock Out</a>
+                        <a class="side-sub-link" href="{{ route('inventory.adjustment') }}">Stock Adjustment</a>
+                        <a class="side-sub-link" href="{{ route('inventory.low-stock') }}">Low Stock</a>
+                        <a class="side-sub-link" href="{{ route('inventory.expiring-products') }}">Expiring Products</a>
                     </div>
                 </details>
 

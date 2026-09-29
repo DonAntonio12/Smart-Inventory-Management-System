@@ -14,6 +14,7 @@ class Product extends Model
         'name',
         'sku',
         'category',
+        'brand',
         'quantity',
         'low_stock_threshold',
         'expiration_date',
