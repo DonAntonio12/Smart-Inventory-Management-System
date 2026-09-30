@@ -7,8 +7,11 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -19,6 +22,12 @@ Route::get('/dashboard', DashboardController::class)->middleware('auth')->name('
 
 Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/settings/general', [SettingController::class, 'updateGeneral'])->name('settings.general.update');
+    Route::post('/settings/inventory', [SettingController::class, 'updateInventory'])->name('settings.inventory.update');
+    Route::post('/settings/receipt', [SettingController::class, 'updateReceipt'])->name('settings.receipt.update');
+    Route::post('/settings/security', [SettingController::class, 'updateSecurity'])->name('settings.security.update');
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
@@ -44,6 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/inventory/stock-out', [InventoryController::class, 'storeStockOut'])->name('inventory.stock-out.store');
     Route::get('/inventory/adjustment', [InventoryController::class, 'adjustment'])->name('inventory.adjustment');
     Route::post('/inventory/adjustment', [InventoryController::class, 'storeAdjustment'])->name('inventory.adjustment.store');
+
+    Route::resource('users', UserController::class)->except('show');
+    Route::resource('roles', RoleController::class)->except('show');
 
     Route::get('/products/categories', [ProductController::class, 'categories'])->name('products.categories');
     Route::get('/products/brands', [ProductController::class, 'brands'])->name('products.brands');
