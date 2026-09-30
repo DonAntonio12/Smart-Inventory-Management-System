@@ -58,10 +58,12 @@
         @if ($products->isNotEmpty())
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>On hand</th><th>Reorder at</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>On hand</th><th>Reorder at</th><th>Stock status</th><th>Expiry status</th></tr></thead>
                     <tbody>
                         @foreach ($products as $product)
                             @php($stockClass = $product->quantity === 0 ? 'out' : ($product->quantity <= $product->low_stock_threshold ? 'low' : ''))
+                            @php($isExpired = $product->expiration_date?->lt(today()) ?? false)
+                            @php($expiresSoon = $product->expiration_date && $product->expiration_date->lte(today()->addDays(30)))
                             <tr>
                                 <td><span class="product-name">{{ $product->name }}</span><span class="product-sku">{{ $product->sku }}</span></td>
                                 <td>{{ $product->category ?: 'Uncategorized' }}</td>
@@ -69,6 +71,7 @@
                                 <td>{{ number_format($product->quantity) }}</td>
                                 <td>{{ number_format($product->low_stock_threshold) }}</td>
                                 <td><span class="stock-pill {{ $stockClass }}">{{ $product->quantity === 0 ? 'Out of stock' : ($product->quantity <= $product->low_stock_threshold ? 'Low stock' : 'In stock') }}</span></td>
+                                <td>@if ($product->expiration_date)<span class="stock-pill {{ $isExpired ? 'out' : ($expiresSoon ? 'low' : '') }}">{{ $isExpired ? 'Expired' : ($expiresSoon ? 'Expiring soon' : 'Not expiring') }}</span>@else—@endif</td>
                             </tr>
                         @endforeach
                     </tbody>

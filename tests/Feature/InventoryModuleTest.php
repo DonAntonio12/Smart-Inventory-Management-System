@@ -33,6 +33,20 @@ test('stock overview and focused inventory lists show database products', functi
         'expiration_date' => now()->addDays(12)->toDateString(),
     ]);
     Product::create([
+        'name' => 'Expired Juice',
+        'sku' => 'INV-EXPIRED',
+        'quantity' => 4,
+        'low_stock_threshold' => 2,
+        'expiration_date' => now()->subDays(3)->toDateString(),
+    ]);
+    Product::create([
+        'name' => 'Expired Empty Syrup',
+        'sku' => 'INV-EXPIRED-EMPTY',
+        'quantity' => 0,
+        'low_stock_threshold' => 2,
+        'expiration_date' => now()->subDays(20)->toDateString(),
+    ]);
+    Product::create([
         'name' => 'Healthy Cups',
         'sku' => 'INV-OK',
         'quantity' => 40,
@@ -44,7 +58,13 @@ test('stock overview and focused inventory lists show database products', functi
         ->assertOk()
         ->assertSee('Stock Overview')
         ->assertSee('Total units')
-        ->assertSee('50');
+        ->assertSee('<strong>54</strong>', false)
+        ->assertSee('Expired');
+
+    $this->get('/products')
+        ->assertOk()
+        ->assertSee('Expired Juice')
+        ->assertSee('Expired');
 
     $this->get('/inventory/low-stock')
         ->assertOk()
@@ -54,7 +74,12 @@ test('stock overview and focused inventory lists show database products', functi
     $this->get('/inventory/expiring-products')
         ->assertOk()
         ->assertSee('Expiring Tea')
+        ->assertSee('Expired Juice')
+        ->assertSee('Expired Empty Syrup')
+        ->assertSee('Expired')
         ->assertDontSee('Healthy Cups');
+
+    $this->get('/reports/inventory')->assertOk()->assertSee('Expired');
 });
 
 test('stock in increments quantity and writes a transaction', function () {

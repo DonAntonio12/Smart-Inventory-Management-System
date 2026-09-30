@@ -43,8 +43,8 @@ class InventoryController extends Controller
     public function expiringProducts(): View
     {
         return view('inventory.products', [
-            'title' => 'Expiring Products',
-            'description' => 'In-stock products expiring within the next 30 days.',
+            'title' => 'Expired & Expiring Products',
+            'description' => 'In-stock products that are already expired or will expire within the next 30 days.',
             'products' => $this->expiringQuery()->orderBy('expiration_date')->orderBy('name')->paginate(12),
             'kind' => 'expiring',
         ]);
@@ -176,7 +176,13 @@ class InventoryController extends Controller
     private function expiringQuery(): Builder
     {
         return Product::query()
-            ->where('quantity', '>', 0)
-            ->whereBetween('expiration_date', [now()->toDateString(), now()->addDays(30)->toDateString()]);
+            ->whereNotNull('expiration_date')
+            ->where(function (Builder $query): void {
+                $query->where('expiration_date', '<', today()->toDateString())
+                    ->orWhere(function (Builder $query): void {
+                        $query->where('quantity', '>', 0)
+                            ->where('expiration_date', '<=', now()->addDays(30)->toDateString());
+                    });
+            });
     }
 }

@@ -74,12 +74,14 @@
         @if ($products->isNotEmpty())
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>On hand</th><th>Reorder at</th><th>Expiration</th><th>Actions</th></tr></thead>
+                    <thead><tr><th>Product</th><th>Category</th><th>Brand</th><th>On hand</th><th>Reorder at</th><th>Expiration / status</th><th>Actions</th></tr></thead>
                     <tbody>
                         @foreach ($products as $product)
                             @php
                                 $stockState = $product->quantity === 0 ? 'out' : ($product->quantity <= $product->low_stock_threshold ? 'low' : '');
                                 $stockLabel = $product->quantity === 0 ? 'Out of stock' : ($product->quantity <= $product->low_stock_threshold ? 'Low stock' : 'In stock');
+                                $isExpired = $product->expiration_date?->lt(today()) ?? false;
+                                $expiresSoon = $product->expiration_date && $product->expiration_date->lte(today()->addDays(30));
                             @endphp
                             <tr>
                                 <td><span class="product-name">{{ $product->name }}</span><span class="product-sku">{{ $product->sku }}</span></td>
@@ -87,7 +89,14 @@
                                 <td>{{ $product->brand ?: '—' }}</td>
                                 <td><span class="stock-pill {{ $stockState }}">{{ number_format($product->quantity) }} · {{ $stockLabel }}</span></td>
                                 <td>{{ number_format($product->low_stock_threshold) }}</td>
-                                <td>{{ $product->expiration_date?->format('M j, Y') ?? '—' }}</td>
+                                <td>
+                                    @if ($product->expiration_date)
+                                        <span>{{ $product->expiration_date->format('M j, Y') }}</span>
+                                        <span class="stock-pill {{ $isExpired ? 'out' : ($expiresSoon ? 'low' : '') }}">{{ $isExpired ? 'Expired' : ($expiresSoon ? 'Expiring soon' : 'Not expiring') }}</span>
+                                    @else
+                                        —
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="row-actions">
                                         <a class="button button-quiet" href="{{ route('products.edit', $product) }}">Edit</a>

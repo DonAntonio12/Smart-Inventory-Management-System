@@ -201,10 +201,22 @@
                     <a class="side-sub-link {{ request()->routeIs('inventory.expiring-products') ? 'active' : '' }}" href="{{ route('inventory.expiring-products') }}">Expiring Products</a>
                 </div>
             </details>
-            <span class="side-link side-muted"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 8h18l-2 12H5L3 8Zm4 0 2-5h6l2 5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Suppliers</span>
-            <a class="side-link" href="{{ route('dashboard') }}#recent-transactions"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16l-1.5 15h-13L4 6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Sales</a>
+            <details class="side-group" @if (request()->routeIs('suppliers.*', 'purchase-orders.*')) open @endif>
+                <summary class="side-link side-group-toggle {{ request()->routeIs('suppliers.*', 'purchase-orders.*') ? 'active' : '' }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 8h18l-2 12H5L3 8Zm4 0 2-5h6l2 5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Suppliers</span><svg class="side-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                <div class="side-subnav">
+                    <a class="side-sub-link {{ request()->routeIs('suppliers.*') ? 'active' : '' }}" href="{{ route('suppliers.index') }}">Suppliers</a>
+                    <a class="side-sub-link {{ request()->routeIs('purchase-orders.*') ? 'active' : '' }}" href="{{ route('purchase-orders.index') }}">Purchase Orders</a>
+                </div>
+            </details>
+            <details class="side-group" @if (request()->routeIs('sales.*')) open @endif>
+                <summary class="side-link side-group-toggle {{ request()->routeIs('sales.*') ? 'active' : '' }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16l-1.5 15h-13L4 6Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg><span>Sales</span><svg class="side-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                <div class="side-subnav">
+                    <a class="side-sub-link {{ request()->routeIs('sales.create', 'sales.store') ? 'active' : '' }}" href="{{ route('sales.create') }}">New Sale</a>
+                    <a class="side-sub-link {{ request()->routeIs('sales.transactions', 'sales.show') ? 'active' : '' }}" href="{{ route('sales.transactions') }}">Transactions</a>
+                </div>
+            </details>
             <a class="side-link" href="{{ route('dashboard') }}#sales-chart"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h17M8 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Smart Analytics</a>
-            <span class="side-link side-muted"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h17M8 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Reports</span>
+            <a class="side-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5m0 14h17M8 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Reports</a>
             <a class="side-link" href="{{ route('dashboard') }}#notifications"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9m-8 13h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Notifications</a>
             <span class="side-link side-muted"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M3 20v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Users &amp; Roles</span>
             <span class="side-link side-muted"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19 15a1.5 1.5 0 0 0 1.5 1.5L19 20l-2-1a7 7 0 0 1-2 1l-.5 2h-4L10 20a7 7 0 0 1-2-1l-2 1-1.5-3.5A1.5 1.5 0 0 0 6 15v-2a1.5 1.5 0 0 0-1.5-1.5L6 8l2 1a7 7 0 0 1 2-1l.5-2h4l.5 2a7 7 0 0 1 2 1l2-1 1.5 3.5A1.5 1.5 0 0 0 19 13v2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Settings</span>
