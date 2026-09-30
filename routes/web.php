@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\ReportController;
@@ -17,6 +18,8 @@ Route::get('/', function () {
 Route::get('/dashboard', DashboardController::class)->middleware('auth')->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/sales', [ReportController::class, 'sales'])->name('reports.sales');
     Route::get('/reports/inventory', [ReportController::class, 'inventory'])->name('reports.inventory');

@@ -96,3 +96,30 @@ test('a sale that exceeds available stock changes neither inventory nor transact
     $this->assertDatabaseHas('products', ['id' => $product->id, 'quantity' => 2]);
     $this->assertDatabaseCount('transactions', 0);
 });
+
+test('expired products cannot be selected or sold', function () {
+    $user = User::factory()->create();
+    $product = Product::create([
+        'name' => 'Expired Juice',
+        'sku' => 'SALE-EXPIRED-001',
+        'quantity' => 6,
+        'low_stock_threshold' => 1,
+        'expiration_date' => now()->subDay()->toDateString(),
+    ]);
+
+    $this->actingAs($user)
+        ->get('/sales/new')
+        ->assertOk()
+        ->assertDontSee('Expired Juice');
+
+    $this->from('/sales/new')
+        ->post('/sales', [
+            'items' => [
+                ['product_id' => $product->id, 'quantity' => 1, 'unit_price' => 4.50],
+            ],
+        ])
+        ->assertSessionHasErrors('items.0.product_id');
+
+    $this->assertDatabaseHas('products', ['id' => $product->id, 'quantity' => 6]);
+    $this->assertDatabaseCount('transactions', 0);
+});

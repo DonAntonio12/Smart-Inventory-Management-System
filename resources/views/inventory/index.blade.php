@@ -5,6 +5,11 @@
 @push('styles')
     <style>
         .inventory-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .inventory-expiry { display: block; color: inherit; text-decoration: none; border-color: #ecdcd3; transition: transform .16s ease, border-color .16s ease; }
+        .inventory-expiry:hover { transform: translateY(-1px); border-color: #d69a83; }
+        .stat.inventory-expiry > span { color: #9f5745; }
+        .stat.inventory-expiry > strong { color: #a34839; }
+        .stat.inventory-expiry > small { display: block; margin-top: 5px; color: #879188; font-size: 8px; }
         .inventory-shortcuts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 17px; }
         .inventory-shortcut { display: flex; min-height: 67px; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid #e4e7df; border-radius: 5px; background: #fffefa; transition: border-color .16s ease, transform .16s ease; }
         .inventory-shortcut:hover { transform: translateY(-1px); border-color: #9db79a; }
@@ -45,6 +50,7 @@
         <article class="stat"><span>Total units</span><strong>{{ number_format($totalQuantity) }}</strong></article>
         <article class="stat"><span>Low stock</span><strong>{{ number_format($lowStockCount) }}</strong></article>
         <article class="stat"><span>Out of stock</span><strong>{{ number_format($outOfStockCount) }}</strong></article>
+        <a class="stat inventory-expiry" href="{{ route('inventory.expiring-products') }}" aria-label="View {{ $expiringCount }} expired or expiring products"><span>Expired / expiring</span><strong>{{ number_format($expiringCount) }}</strong><small>Expired or due within 30 days</small></a>
     </section>
 
     <section class="inventory-shortcuts" aria-label="Stock movement actions">

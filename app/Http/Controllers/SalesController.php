@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,13 @@ class SalesController extends Controller
     public function create(): View
     {
         return view('sales.create', [
-            'products' => Product::query()->orderBy('name')->get(['id', 'name', 'sku', 'quantity']),
+            'products' => Product::query()
+                ->where(function (Builder $query): void {
+                    $query->whereNull('expiration_date')
+                        ->orWhereDate('expiration_date', '>=', today()->toDateString());
+                })
+                ->orderBy('name')
+                ->get(['id', 'name', 'sku', 'quantity']),
         ]);
     }
 
@@ -48,6 +55,12 @@ class SalesController extends Controller
 
             foreach ($items as $index => $item) {
                 $product = $products->get($item['product_id']);
+
+                if ($product->expiration_date?->lt(today())) {
+                    throw ValidationException::withMessages([
+                        'items.'.$index.'.product_id' => 'Expired products cannot be sold.',
+                    ]);
+                }
 
                 if ($item['quantity'] > $product->quantity) {
                     throw ValidationException::withMessages([

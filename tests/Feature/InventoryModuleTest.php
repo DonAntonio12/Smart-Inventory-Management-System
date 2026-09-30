@@ -59,6 +59,8 @@ test('stock overview and focused inventory lists show database products', functi
         ->assertSee('Stock Overview')
         ->assertSee('Total units')
         ->assertSee('<strong>54</strong>', false)
+        ->assertSee('Expired / expiring')
+        ->assertSee('/inventory/expiring-products')
         ->assertSee('Expired');
 
     $this->get('/products')
