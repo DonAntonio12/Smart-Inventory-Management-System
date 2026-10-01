@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
@@ -22,6 +23,11 @@ Route::get('/dashboard', DashboardController::class)->middleware('auth')->name('
 
 Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+
+    Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics.index');
+    Route::get('/analytics/forecast', [AnalyticsController::class, 'forecast'])->name('analytics.forecast');
+    Route::get('/analytics/reorder', [AnalyticsController::class, 'reorder'])->name('analytics.reorder');
+    Route::get('/analytics/abc-analysis', [AnalyticsController::class, 'abcAnalysis'])->name('analytics.abc-analysis');
 
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('/settings/general', [SettingController::class, 'updateGeneral'])->name('settings.general.update');
